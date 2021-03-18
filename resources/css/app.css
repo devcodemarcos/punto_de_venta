@@ -1,0 +1,19 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* @import 'select2'; */
+@import "jquery-confirm/css/jquery-confirm.css";
+
+/*custom class*/
+label.error {      
+    @apply text-red-400;
+    @apply text-xs;
+    @apply italic;
+}
+input.error {
+    @apply border-red-400;
+}
+select.error {
+    @apply border-red-400;
+}
