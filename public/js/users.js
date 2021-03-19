@@ -24,10 +24,9 @@ $('#tblUsers').on('click', '.btnDeleteUser', function (e) {
             var total = parseInt($('#totalUsers').text()) - 1;
             $('#totalUsers').text(total);
             user.closest('tr').fadeOut();
-            notification({
-              type: 'success',
-              title: '&#x2705; &nbsp; Buen trabajo',
-              message: response.message
+            $.notifyBar({
+              cssClass: "success",
+              html: response.message
             });
           });
         }

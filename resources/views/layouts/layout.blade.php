@@ -10,7 +10,7 @@
     <!-- Primary Meta Tags -->
     <link rel="icon" href="{{ asset('images/shorcut/pos_terminal_6R0_icon.ico') }}">
     <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
-    <link rel="stylesheet" href="{{ mix('/css/plugins/notifIt.css') }}">
+    <link rel="stylesheet" href="{{ mix('/css/plugins/notifyBar.css') }}">
     @stack('css')
 </head>
 
@@ -80,7 +80,6 @@
     @stack('livewire')
     <script src="https://kit.fontawesome.com/0220325a0e.js" crossorigin="anonymous"></script>
     <script src="{{ mix('/js/app.js') }}"></script>
-    <script src="{{ asset('/js/plugins/notifIt.min.js') }}"></script>
     @stack('scripts')
 </body>
 

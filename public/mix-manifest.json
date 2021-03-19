@@ -5,6 +5,7 @@
     "/js/providers.js": "/js/providers.js",
     "/js/login.js": "/js/login.js",
     "/js/users.js": "/js/users.js",
-    "/css/plugins/notifIt.css": "/css/plugins/notifIt.css",
-    "/css/app.css": "/css/app.css"
+    "/css/plugins/notifyBar.css": "/css/plugins/notifyBar.css",
+    "/css/app.css": "/css/app.css",
+    "/css/plugins/jq-notify-bar-icons.svg": "/css/plugins/jq-notify-bar-icons.svg"
 }

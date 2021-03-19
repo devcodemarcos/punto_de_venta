@@ -13,6 +13,7 @@ const mix = require('laravel-mix');
 
 mix.js([ //plugins y archivos globales
     'resources/js/app.js',
+    'resources/js/plugins/jquery.notifyBar.js'
 ], 'public/js')
 .js('resources/js/products.js', 'public/js') //archivos por modulos
 .js('resources/js/sales.js', 'public/js')
@@ -24,4 +25,5 @@ mix.js([ //plugins y archivos globales
     require('tailwindcss'),
     require('autoprefixer'),
 ])
-.postCss('resources/css/plugins/notifIt.css', 'public/css/plugins');
+.postCss('resources/css/plugins/notifyBar.css', 'public/css/plugins')
+.copy('resources/css/plugins/jq-notify-bar-icons.svg', 'public/css/plugins');

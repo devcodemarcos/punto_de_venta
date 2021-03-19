@@ -45,16 +45,3 @@ $(".container-menu").on("click", "[data-route]", function(e) {
     var route = $(this).data('route');
     window.location.href = route;
 });
-
-// $('.select2').select2();
-
-notification = function (settings = {}) {
-    notif({
-        type: 'type' in settings ? settings.type : 'info',
-        msg: 'message' in settings && 'title' in settings ? `<b>${settings.title}:</b> ${settings.message}` : '<b>TITLE:<b/> Message default text',
-        position: "center",
-        width: 'all',
-        height: 60,
-        autohide: false
-    });
-};

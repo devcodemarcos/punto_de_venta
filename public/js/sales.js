@@ -2,7 +2,8 @@
 /*!*******************************!*\
   !*** ./resources/js/sales.js ***!
   \*******************************/
-products_list = {};
+var products_list = new Object();
+var sale = new Object();
 $('#frm-barcode').on('submit', function (e) {
   e.preventDefault();
   var frm = $(this);
@@ -15,20 +16,29 @@ $('#frm-barcode').on('submit', function (e) {
     appendToObject(response);
     displayToTable();
   }).fail(function (jqXHR, textStatus, errorThrown) {
-    if (jqXHR.status === 404) {
-      // alert('Producto no encontrado');
-      notification({
-        type: 'error',
-        title: '&#10060; &nbsp; ERROR',
-        message: 'El producto no existe'
-      });
-    } else {
-      // alert('Error desconocido, favor de comunicarse con el desarrollador');
-      notification({
-        type: 'error',
-        title: '&#10060; &nbsp; ERROR',
-        message: 'Error desconocido, favor de comunicarse con el desarrollador'
-      });
+    var response = jqXHR.responseJSON;
+
+    switch (jqXHR.status) {
+      case 404:
+        $.notifyBar({
+          cssClass: "error",
+          html: response.message
+        });
+        break;
+
+      case 406:
+        $.notifyBar({
+          cssClass: "warning",
+          html: response.message
+        });
+        break;
+
+      default:
+        $.notifyBar({
+          cssClass: "error",
+          html: "Error desconocido, contactar al administrador del sistema!"
+        });
+        break;
     }
   }).always(function () {
     frm.trigger("reset");
@@ -70,9 +80,11 @@ var displayToTable = function displayToTable() {
   });
   $('#products-list tbody').append(trs);
   $('#total-text').text(total);
+  sale.total = total;
 };
 
 $('#btn-cancel-sale').on('click', function () {
+  if (Object.keys(products_list).length === 0) return false;
   $.confirm({
     title: 'Cancelar venta',
     content: '¿Esta seguro de cancelar esta venta?<br/><b>Esta acción no se puede deshacer</b>',
@@ -81,10 +93,10 @@ $('#btn-cancel-sale').on('click', function () {
     useBootstrap: false,
     boxWidth: '400px',
     buttons: {
-      tryAgain: {
+      accept: {
         text: 'Si, cancelar venta',
         action: function action() {
-          products_list = {};
+          products_list = new Object();
           $('#products-list tbody').empty().append("<tr><td colspan=\"5\" class=\"bg-gray-100 uppercase text-xs py-10 border text-center text-gray-600\">No hay productos en la lista</td></tr>");
           $('#total-text').text('0.00');
           setTimeout(function () {
@@ -99,5 +111,50 @@ $('#btn-cancel-sale').on('click', function () {
     }
   });
 });
+$('#btn-pay-sale').on('click', function () {
+  // if (Object.keys(products_list).length === 0) return false;
+  $.confirm({
+    title: 'Cobrar venta',
+    type: 'blue',
+    typeAnimated: true,
+    useBootstrap: false,
+    boxWidth: '500px',
+    content: form(),
+    buttons: {
+      formSubmit: {
+        text: 'Submit',
+        btnClass: 'btn-blue',
+        action: function action() {
+          var name = this.$content.find('.name').val();
+
+          if (!name) {
+            $.alert('provide a valid name');
+            return false;
+          }
+
+          $.alert('Your name is ' + name);
+        }
+      },
+      cancel: function cancel() {//close
+      }
+    },
+    onContentReady: function onContentReady() {
+      var form = this;
+      var total = sale.total;
+      form.$content.find('#total_text').text(total.toFixed(2)); // this.buttons.formSubmit.disable();
+
+      this.$content.find('#name').on('keyup', function (e) {
+        var pago = parseFloat($(this).val()).toFixed(2);
+        var cambio = pago - total;
+        form.$content.find('#pago_text').text(pago);
+        form.$content.find('#cambio_text').text(cambio.toFixed(2));
+      });
+    }
+  });
+});
+
+var form = function form() {
+  return "\n    <div class=\"w-full mt-2 px-0.5 mb-6\">\n        <label class=\"block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2\" for=\"name\">\n            Cantidad recibida\n        </label>\n        <div class=\"relative flex w-full flex-wrap items-stretch mb-3\">\n            <span class=\"z-10 h-full leading-snug font-normal absolute text-center text-gray-400 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2\">\n                <i class=\"fas fa-dollar-sign\"></i>\n            </span>\n            <input type=\"text\" name=\"name\" id=\"name\" class=\"px-3 py-2 text-gray-500 relative bg-white rounded text-sm border-gray-300 outline-none focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full pl-10\" />\n        </div>\n        <div class=\"relative flex w-full flex-wrap items-stretch mb-3\">\n            <ul>\n                <li>Total: $<span id=\"total_text\">0.00</span></li>\n                <li>Pago: $<span id=\"pago_text\">0.00</span></li>\n                <li>Cambio: $<span id=\"cambio_text\">0.00</span></li>\n            </ul>\n        </div>\n    </div>\n    ";
+};
 /******/ })()
 ;

@@ -74,17 +74,15 @@ $('#frmProducts').validate({
         $('#barcode').trigger('focus');
       }
 
-      notification({
-        type: 'success',
-        title: '&#x2705; &nbsp; Buen trabajo',
-        message: response.message
+      $.notifyBar({
+        cssClass: "success",
+        html: response.message
       });
     }).fail(function ($jqXHR, textStatus, errorThrown) {
       var response = $jqXHR.responseJSON;
-      notification({
-        type: 'error',
-        title: '&#10060; &nbsp; ERROR',
-        message: response.message
+      $.notifyBar({
+        cssClass: "error",
+        html: response.message
       });
     });
   }
@@ -111,10 +109,9 @@ $('#tblProducts').on('click', '.btnDeleteProduct', function (e) {
             var total = parseInt($('#totalProducts').text()) - 1;
             $('#totalProducts').text(total);
             product.closest('tr').fadeOut();
-            notification({
-              type: 'success',
-              title: '&#x2705; &nbsp; Buen trabajo',
-              message: response.message
+            $.notifyBar({
+              cssClass: "success",
+              html: response.message
             });
           });
         }

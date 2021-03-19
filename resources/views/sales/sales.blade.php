@@ -57,7 +57,7 @@ $breads = [
                     <button type="button" id="btn-cancel-sale" class="w-32 bg-white tracking-wide text-gray-800 font-bold rounded border-b-2 border-red-400 hover:border-red-500 hover:bg-red-400 hover:text-white shadow-md py-2 px-6 inline-flex items-center float-right">
                         <span class="mx-auto">Cancelar</span>
                     </button>
-                    <button type="button" class="w-32 bg-white tracking-wide text-gray-800 font-bold rounded border-b-2 border-blue-400 hover:border-blue-500 hover:bg-blue-400 hover:text-white shadow-md py-2 px-6 inline-flex items-center float-right">
+                    <button type="button" id="btn-pay-sale" class="w-32 bg-white tracking-wide text-gray-800 font-bold rounded border-b-2 border-blue-400 hover:border-blue-500 hover:bg-blue-400 hover:text-white shadow-md py-2 px-6 inline-flex items-center float-right">
                         <span class="mx-auto">Cobrar</span>
                     </button>
                 </div>

@@ -41,19 +41,11 @@ $('#frmProviders').validate({
                 $(form).trigger('reset');
                 $('#name').trigger('focus');
             }
-            notification({
-                type: 'success',
-                title: '&#x2705; &nbsp; Buen trabajo',
-                message: response.message
-            });
+            $.notifyBar({ cssClass: "success", html: response.message });
         })
         .fail(function ($jqXHR, textStatus, errorThrown) {
             var response = $jqXHR.responseJSON;
-            notification({
-                type: 'error',
-                title: '&#10060; &nbsp; ERROR',
-                message: response.message
-            });
+            $.notifyBar({ cssClass: "error", html: response.message });
         });
     }
 });
@@ -81,12 +73,7 @@ $('#tblProviders').on('click', '.btnDeleteProvider', function(e) {
                         let total = parseInt($('#totalProviders').text()) - 1;
                         $('#totalProviders').text(total);
                         provider.closest('tr').fadeOut();
-
-                        notification({
-                            type: 'success',
-                            title: '&#x2705; &nbsp; Buen trabajo',
-                            message: response.message
-                        });
+                        $.notifyBar({ cssClass: "success", html: response.message });
                     });
                 }
             },
