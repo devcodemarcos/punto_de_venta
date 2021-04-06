@@ -23,6 +23,7 @@
     "dependencies": {
         "jquery": "^3.5.1",
         "jquery-confirm": "^3.3.4",
-        "jquery-validation": "^1.19.3"
+        "jquery-validation": "^1.19.3",
+        "tooltipster": "^4.2.7"
     }
 }

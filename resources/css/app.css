@@ -1,12 +1,13 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
-
 /* @import 'select2'; */
+
 @import "jquery-confirm/css/jquery-confirm.css";
+@import "tooltipster/dist/css/tooltipster.bundle.css";
 
 /*custom class*/
-label.error {      
+label.error {
     @apply text-red-400;
     @apply text-xs;
     @apply italic;
@@ -16,4 +17,41 @@ input.error {
 }
 select.error {
     @apply border-red-400;
+}
+
+/*Modal class*/
+.animated {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+.animated.faster {
+    -webkit-animation-duration: 500ms;
+    animation-duration: 500ms;
+}
+.fadeIn {
+    -webkit-animation-name: fadeIn;
+    animation-name: fadeIn;
+}
+.fadeOut {
+    -webkit-animation-name: fadeOut;
+    animation-name: fadeOut;
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
 }

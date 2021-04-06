@@ -6,7 +6,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
-class UserSeeder extends Seeder
+class UnitSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,17 +15,13 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->insert([
-            'name' => 'Administrador',
-            'username' => 'admin',
-            'password' => bcrypt('secret'),
+        DB::table('units')->insert([
+            'type' => 'Unidad',
             'created_at' => Carbon::now()
         ]);
         
-        DB::table('users')->insert([
-            'name' => 'Cajero',
-            'username' => 'cajero',
-            'password' => bcrypt('cajero1'),
+        DB::table('units')->insert([
+            'type' => 'Granel',
             'created_at' => Carbon::now()
         ]);
     }

@@ -127,6 +127,29 @@ $breads = [
                                 </div>
                             </div>
                             <div class="md:w-1/3 px-3 mb-6 md:mb-0">
+                                <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="provider_id">
+                                    Tipo de venta
+                                </label>
+                                <div class="relative flex w-full flex-wrap items-stretch mb-3">
+                                    <span class="z-10 h-full leading-snug font-normal absolute text-center text-gray-400 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
+                                        <i class="fas fa-balance-scale"></i>
+                                    </span>
+                                    <select name="unit_id" id="unit_id" class="px-3 py-2 text-gray-500 relative bg-white rounded text-sm border-gray-300 outline-none focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full pl-10">
+                                        @forelse ($units as $index => $unit)
+                                            @if($index === 0)
+                                            <option value="0">-- Seleccione una unidad --</option>
+                                            @endif
+                                            <option {{ $unit->id == $product->unit_id ? 'selected' : '' }} value="{{ $unit->id }}">{{ $unit->type }}</option>
+                                        @empty
+                                            <option value="0">-- No hay unidades de venta --</option>
+                                        @endforelse
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="-mx-3 md:flex mb-6">
+                            <div class="md:w-1/3 px-3 mb-6 md:mb-0">
                                 <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="photo">
                                     Imagen o foto del producto
                                 </label>

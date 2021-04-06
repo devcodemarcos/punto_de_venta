@@ -107,8 +107,8 @@ $breads = [
                         </div> -->
 
                         <div class="m-3">
-                            <button type="submit" class="w-32 bg-white tracking-wide text-gray-800 font-bold rounded border-b-2 border-blue-400 hover:border-blue-500 hover:bg-blue-400 hover:text-white shadow-md py-2 px-6 inline-flex items-center float-right">
-                                <span class="mx-auto">Registrar</span>
+                            <button type="button" class="w-32 bg-white tracking-wide text-gray-800 font-bold rounded border-b-2 border-blue-400 hover:border-blue-500 hover:bg-blue-400 hover:text-white shadow-md py-2 px-6 inline-flex items-center float-right">
+                                <span class="mx-auto">Actualizar</span>
                             </button>
                         </div>
                     </div>

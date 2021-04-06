@@ -10,13 +10,15 @@ $('#frmProducts').validate({
         },
         stock: {
             required: true,
+            number: true,
             maxlength: 4,
-            number: true
+            min: 1
         },
         minimum_stock: {
             required: true,
+            number: true,
             maxlength: 4,
-            number: true
+            min: 1
         },
         purchase_price: {
             required: true,
@@ -25,6 +27,9 @@ $('#frmProducts').validate({
         sale_price: {
             required: true,
             number: true
+        },
+        unit_id: {
+            min: 1
         }
     },
     messages: {
@@ -39,12 +44,14 @@ $('#frmProducts').validate({
         stock: {
             required: 'El stock del producto es obligatorio',
             maxlength: 'El stock debe tener máximo 4 dígitos',
-            number: 'Ingrese solo dígitos'
+            number: 'Ingrese solo dígitos',
+            min: 'El stock debe ser mayor o igual a 1'
         },
         minimum_stock: {
             required: 'El stock mínimo del producto es olbigatorio',
             maxlength: 'El stock mínimo debe tener máximo 4 dígitos',
-            number: 'Ingrese solo dígitos'
+            number: 'Ingrese solo dígitos',
+            min: 'El stock mínimo debe ser mayor o igual a 1'
         },
         purchase_price: {
             required: 'El precio de compra es obligatorio',
@@ -53,6 +60,9 @@ $('#frmProducts').validate({
         sale_price: {
             required: 'El precio de venta es obligatorio',
             number: 'Ingrese solo dígitos'
+        },
+        unit_id: {
+            min: 'Seleccione un tipo de venta'
         }
     },
     submitHandler: function (form) {
@@ -118,12 +128,21 @@ $('#tblProducts').on('click', '.btnEditProduct', function (e) {
     window.location.href = product.data('route-edit');
 });
 
-// $('#tblProducts').on('dblclick', '.td-product-stock', function (e) {
-// e.stopPropagation();
-// let td = $(this);
-// let stock = td.find('.product-stock').text().trim();
-// let input = `<input value="${stock}" type="number" name="stock" onkeypress="return isNumberKey(event)" class="edit-stock text-gray-500 relative bg-white rounded text-sm border-gray-300 outline-none focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-2/4 px-3 py-2"/>`;
+let barcode = $('#tooltip-barcode');
 
-// td.find('.product-stock').html(input);
-// $('.edit-stock').trigger('focus');
-// });
+barcode.tooltipster({
+    position: 'top',
+    animation: 'grow'
+});
+
+barcode.on('click', function() {
+    let code = $(this);
+    $.ajax({
+        url: code.data('route'),
+        method: 'POST',
+        dataType: 'json'
+    })
+    .done(function(response) {
+        $('#barcode').val(response.barcode);
+    });
+});

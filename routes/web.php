@@ -36,9 +36,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/productos', [ProductController::class, 'index'])->name('product.index');
     Route::get('/producto/registro', [ProductController::class, 'create'])->name('product.create');
     Route::post('/producto/registro', [ProductController::class, 'store'])->name('product.store')->middleware('ajax');
-    Route::delete('producto/{product}/eliminar', [ProductController::class, 'delete'])->name('product.delete')->middleware('ajax');
-    Route::get('producto/{product}/edit', [ProductController::class, 'edit'])->name('product.edit');
-    Route::put('producto/{product}/update', [ProductController::class, 'update'])->name('product.update');//->middleware('ajax');
+    Route::delete('/producto/{product}/eliminar', [ProductController::class, 'delete'])->name('product.delete')->middleware('ajax');
+    Route::get('/producto/{product}/editar', [ProductController::class, 'edit'])->name('product.edit');
+    Route::put('/producto/{product}/update', [ProductController::class, 'update'])->name('product.update')->middleware('ajax');
+    Route::post('/producto/generar-codigo', [ProductController::class, 'generateBarcode'])->name('product.barcode.generate')->middleware('ajax');
     
     // Proveedores
     Route::get('proveedores', [ProviderController::class, 'index'])->name('provider.index');
@@ -50,8 +51,9 @@ Route::middleware('auth')->group(function () {
 
     // Ventas
     Route::get('/venta-de-productos', [SaleController::class, 'sale'])->name('sales');
-    Route::post('/buscar-por-codigo-barras', [SaleController::class, 'findByBarcode'])->name('sales.find.barcode')->middleware('ajax');
-    Route::post('/buscar-por-texto', [SaleController::class, 'findByText'])->name('sales.find.text')->middleware('ajax');
+    Route::post('/buscar-por-codigo-barras', [SaleController::class, 'findByBarcode'])->name('sales.find.barcode');#->middleware('ajax');
+    Route::post('/buscar-por-texto', [SaleController::class, 'findByText'])->name('sales.find.text');#->middleware('ajax');
+    Route::post('/pagar', [SaleController::class, 'payment'])->name('sales.payment');#->middleware('ajax');
 });
 
 // require __DIR__.'/auth.php';

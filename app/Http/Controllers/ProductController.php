@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 
 use App\Models\Product;
 use App\Models\Provider;
+use App\Models\Unit;
+
 use Carbon\Carbon;
 
 class ProductController extends Controller
@@ -19,8 +21,9 @@ class ProductController extends Controller
 
     public function create()
     {
+        $units = Unit::whereNull('deleted_at')->get();
         $providers = Provider::whereNull('deleted_at')->orderBy('name', 'asc')->get();
-        return view('products.create', compact('providers'));
+        return view('products.create', compact('units', 'providers'));
     }
 
     public function store(Request $request)
@@ -35,6 +38,7 @@ class ProductController extends Controller
             $product->stock = $request->post('stock');
             $product->minimum_stock = $request->post('minimum_stock');
             $product->user_id = auth()->id();
+            $product->unit_id = $request->post('unit_id');
 
             if($request->post('provider_id')) {
                 $product->provider_id = $request->post('provider_id');
@@ -42,7 +46,7 @@ class ProductController extends Controller
 
             if ($request->file('photo')) {
                 $imageName = time() . '.' . $request->file('photo')->getClientOriginalExtension();
-                $path = $request->file('photo')->storeAs('/produtcs', $imageName, 'public');
+                $path = $request->file('photo')->storeAs('/products', $imageName, 'public');
                 $product->photo = $path;
             }
         
@@ -76,8 +80,9 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
+        $units = Unit::whereNull('deleted_at')->get();
         $providers = Provider::whereNull('deleted_at')->orderBy('name', 'asc')->get();
-        return view('products.edit', compact('product', 'providers'));
+        return view('products.edit', compact('product', 'units', 'providers'));
     }
 
     public function update(Request $request, Product $product)
@@ -90,6 +95,7 @@ class ProductController extends Controller
             $product->stock = $request->post('stock');
             $product->minimum_stock = $request->post('minimum_stock');
             $product->provider_id = $request->post('provider_id');
+            $product->unit_id = $request->post('unit_id');
 
             if ($request->file('photo')) {
                 if($product->photo !== 'produtcs/no-image-available.jpg') {
@@ -117,5 +123,12 @@ class ProductController extends Controller
                 'message' => $message
             ], 500);
         }
+    }
+
+    public function generateBarcode()
+    {
+        return response()->json([
+            'barcode' => Helper::generateUUID(13)
+        ]);
     }
 }

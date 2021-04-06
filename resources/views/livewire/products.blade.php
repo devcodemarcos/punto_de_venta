@@ -16,8 +16,8 @@
                     <th class="px-5 py-3 uppercase tracking-wider hidden lg:table-cell">Nombre del producto</th>
                     <th class="px-5 py-3 uppercase tracking-wider hidden lg:table-cell">Stock</th>
                     <th class="px-5 py-3 uppercase tracking-wider hidden lg:table-cell">Stock mínimo</th>
-                    <th class="px-5 py-3 uppercase tracking-wider hidden lg:table-cell">Precio de compra</th>
                     <th class="px-5 py-3 uppercase tracking-wider hidden lg:table-cell">Precio de venta</th>
+                    <th class="px-5 py-3 uppercase tracking-wider hidden lg:table-cell">Precio de compra</th>
                     @if($products->count() > 0)
                     <th class="px-5 py-3 uppercase tracking-wider hidden lg:table-cell">Acciones</th>
                     @endif
@@ -25,7 +25,7 @@
             </thead>
             <tbody>
                 @forelse ($products as $product)
-                <tr class="bg-white lg:hover:bg-gray-100 flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0 text-sm">
+                <tr class="@if($product->stock <= $product->minimum_stock) ? animate-pulse bg-red-100 : bg-white @endif lg:hover:bg-gray-100 flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0 text-sm">
                     <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">
                         <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Código de barras</span>
                         {{ $product->barcode }}
@@ -63,24 +63,24 @@
                         {{ $product->minimum_stock }}
                     </td>
                     <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
-                        <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Precio de compra</span>
-                        ${{ number_format($product->purchase_price, 2) }}
-                    </td>
-                    <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
                         <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Precio de venta</span>
                         ${{ number_format($product->sale_price, 2) }}
+                    </td>
+                    <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
+                        <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Precio de compra</span>
+                        ${{ number_format($product->purchase_price, 2) }}
                     </td>
                     @if($products->count() > 0)
                     <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">
                         <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Acciones</span>
 
-                        <button data-route-edit="{{ route('product.edit', $product) }}" class="btnEditProduct inline-block p-3 text-center text-white transition bg-blue-700 rounded-full shadow ripple hover:shadow-lg hover:bg-blue-800 focus:outline-none waves-effect">
+                        <button title="Editar información del producto" data-route-edit="{{ route('product.edit', $product) }}" class="btnEditProduct tooltip inline-block p-3 text-center text-white transition bg-blue-700 rounded-full shadow ripple hover:shadow-lg hover:bg-blue-800 focus:outline-none waves-effect">
                             <svg class="w-5 h-5 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd"></path>
                             </svg>
                         </button>
 
-                        <button data-route-delete="{{ route('product.delete', $product) }}" class="btnDeleteProduct inline-block p-3 text-center text-white transition bg-red-500 rounded-full shadow ripple hover:shadow-lg hover:bg-red-600 focus:outline-none waves-effect">
+                        <button title="Eliminar producto" data-route-delete="{{ route('product.delete', $product) }}" class="btnDeleteProduct tooltip inline-block p-3 text-center text-white transition bg-red-500 rounded-full shadow ripple hover:shadow-lg hover:bg-red-600 focus:outline-none waves-effect">
                             <svg class="w-5 h-5 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
                             </svg>
@@ -91,7 +91,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="5" class="py-4 border text-center text-gray-600">No hay productos registrados</td>
+                    <td colspan="6" class="py-4 border text-center text-gray-600">No hay productos registrados</td>
                 </tr>
                 @endforelse
             </tbody>

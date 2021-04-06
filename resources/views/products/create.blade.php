@@ -30,8 +30,8 @@ $breads = [
                                     Código de barras
                                 </label>
                                 <div class="relative flex w-full flex-wrap items-stretch mb-3">
-                                    <span class="z-10 h-full leading-snug font-normal absolute text-center text-gray-400 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
-                                        <i class="fas fa-barcode"></i>
+                                    <span class="z-10 h-full leading-snug font-normal absolute text-center text-gray-400 hover:text-gray-600 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
+                                        <i class="fas fa-barcode cursor-pointer" id="tooltip-barcode" data-route="{{ route('product.barcode.generate') }}" title="Generar código de barras automaticamente" id="generate-barcode"></i>
                                     </span>
                                     <input type="text" name="barcode" id="barcode" class="px-3 py-2 text-gray-500 relative bg-white rounded text-sm border-gray-300 outline-none focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full pl-10" autofocus />
                                 </div>
@@ -93,7 +93,9 @@ $breads = [
                                     </span>
                                     <select name="provider_id" id="provider_id" class="px-3 py-2 text-gray-500 relative bg-white rounded text-sm border-gray-300 outline-none focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full pl-10">
                                         @forelse ($providers as $provider)
-                                            <option value="">-- Selecciona un proveedor --</option>
+                                            @if($index === 0)
+                                            <option value="">-- Seleccione un proveedor --</option>
+                                            @endif
                                             <option value="{{ $provider->id }}">{{ $provider->name }}</option>
                                         @empty
                                             <option value="">-- No hay proveedores --</option>
@@ -126,6 +128,29 @@ $breads = [
                                     <input type="text" name="sale_price" id="sale_price" class="px-3 py-2 text-gray-500 relative bg-white rounded text-sm border-gray-300 outline-none focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full pl-10" />
                                 </div>
                             </div>
+                            <div class="md:w-1/3 px-3 mb-6 md:mb-0">
+                                <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="provider_id">
+                                    Tipo de venta
+                                </label>
+                                <div class="relative flex w-full flex-wrap items-stretch mb-3">
+                                    <span class="z-10 h-full leading-snug font-normal absolute text-center text-gray-400 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
+                                        <i class="fas fa-balance-scale"></i>
+                                    </span>
+                                    <select name="unit_id" id="unit_id" class="px-3 py-2 text-gray-500 relative bg-white rounded text-sm border-gray-300 outline-none focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full pl-10">
+                                        @forelse ($units as $index => $unit)
+                                            @if($index === 0)
+                                            <option value="0">-- Seleccione una unidad --</option>
+                                            @endif
+                                            <option value="{{ $unit->id }}">{{ $unit->type }}</option>
+                                        @empty
+                                            <option value="0">-- No hay unidades de venta --</option>
+                                        @endforelse
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="-mx-3 md:flex mb-6">
                             <div class="md:w-1/3 px-3 mb-6 md:mb-0">
                                 <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="photo">
                                     Imagen o foto del producto

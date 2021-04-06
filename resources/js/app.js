@@ -8,7 +8,7 @@ $.ajaxSetup({
 });
 
 /*Start - Toggle dropdown list*/
-if(document.getElementById("userMenu") && document.getElementById("userButton")) {
+if (document.getElementById("userMenu") && document.getElementById("userButton")) {
     var userMenuDiv = document.getElementById("userMenu");
     var userMenu = document.getElementById("userButton");
     document.onclick = check;
@@ -41,7 +41,32 @@ function checkParent(t, elm) {
 }
 /*End - Toggle dropdown list*/
 
-$(".container-menu").on("click", "[data-route]", function(e) {
+$(".container-menu").on("click", "[data-route]", function (e) {
     var route = $(this).data('route');
     window.location.href = route;
 });
+
+/* Init tooltips */
+$('.tooltip').tooltipster({
+    position: 'top',
+    animation: 'grow'
+});
+
+/**
+ * Action modal
+ */
+ modalClose = (modal) => {
+    let modalToClose = document.getElementById(modal);
+    modalToClose.classList.remove('fadeIn');
+    modalToClose.classList.add('fadeOut');
+    setTimeout(() => {
+        modalToClose.style.display = 'none';
+    }, 500);
+}
+
+openModal = (modal) => {
+    let modalToOpen = document.getElementById(modal);
+    modalToOpen.classList.remove('fadeOut');
+    modalToOpen.classList.add('fadeIn');
+    modalToOpen.style.display = 'flex';
+}
