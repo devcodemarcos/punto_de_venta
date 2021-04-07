@@ -21,7 +21,7 @@ class UnitSeeder extends Seeder
         ]);
         
         DB::table('units')->insert([
-            'type' => 'Granel',
+            'type' => 'Kilogramo',
             'created_at' => Carbon::now()
         ]);
     }

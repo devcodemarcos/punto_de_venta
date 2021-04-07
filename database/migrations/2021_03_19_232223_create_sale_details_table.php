@@ -15,7 +15,7 @@ class CreateSaleDetailsTable extends Migration
     {
         Schema::create('sale_details', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('quantity');
+            $table->decimal('quantity', 8, 3);
             $table->decimal('total', 8, 2);
             $table->decimal('sale_price', 8, 2);
             $table->timestamps();

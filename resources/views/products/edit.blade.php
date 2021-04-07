@@ -69,7 +69,7 @@ $breads = [
                                     <span class="z-10 h-full leading-snug font-normal absolute text-center text-gray-400 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
                                         <i class="fas fa-hashtag"></i>
                                     </span>
-                                    <input value="{{ $product->stock }}" type="text" name="stock" id="stock" class="px-3 py-2 text-gray-500 relative bg-white rounded text-sm border-gray-300 outline-none focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full pl-10" />
+                                    <input value="{{ $product->unit_id == 1 ? number_format($product->stock) : $product->stock }}" type="text" name="stock" id="stock" class="px-3 py-2 text-gray-500 relative bg-white rounded text-sm border-gray-300 outline-none focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full pl-10" />
                                 </div>
                             </div>
                             <div class="md:w-1/3 px-3 mb-6 md:mb-0">
@@ -80,7 +80,7 @@ $breads = [
                                     <span class="z-10 h-full leading-snug font-normal absolute text-center text-gray-400 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
                                         <i class="fas fa-hashtag"></i>
                                     </span>
-                                    <input value="{{ $product->minimum_stock }}" type="text" name="minimum_stock" id="minimum_stock" class="px-3 py-2 text-gray-500 relative bg-white rounded text-sm border-gray-300 outline-none focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full pl-10" />
+                                    <input value="{{ $product->unit_id == 1 ? number_format($product->minimum_stock) : $product->minimum_stock }}" type="text" name="minimum_stock" id="minimum_stock" class="px-3 py-2 text-gray-500 relative bg-white rounded text-sm border-gray-300 outline-none focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full pl-10" />
                                 </div>
                             </div>
                             <div class="md:w-1/3 px-3 mb-6 md:mb-0">

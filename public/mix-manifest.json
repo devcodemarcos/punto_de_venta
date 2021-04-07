@@ -1,10 +1,11 @@
 {
     "/js/app.js": "/js/app.js",
     "/js/products.js": "/js/products.js",
-    "/js/sales.js": "/js/sales.js",
+    "/js/sales-angular.js": "/js/sales-angular.js",
     "/js/providers.js": "/js/providers.js",
     "/js/login.js": "/js/login.js",
     "/js/users.js": "/js/users.js",
+    "/css/plugins/jquery-ui.css": "/css/plugins/jquery-ui.css",
     "/css/plugins/notifyBar.css": "/css/plugins/notifyBar.css",
     "/css/app.css": "/css/app.css",
     "/css/plugins/jq-notify-bar-icons.svg": "/css/plugins/jq-notify-bar-icons.svg"

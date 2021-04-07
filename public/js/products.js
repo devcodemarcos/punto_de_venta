@@ -15,13 +15,13 @@ $('#frmProducts').validate({
     stock: {
       required: true,
       number: true,
-      maxlength: 4,
+      maxlength: 6,
       min: 1
     },
     minimum_stock: {
       required: true,
       number: true,
-      maxlength: 4,
+      maxlength: 6,
       min: 1
     },
     purchase_price: {
@@ -47,13 +47,13 @@ $('#frmProducts').validate({
     },
     stock: {
       required: 'El stock del producto es obligatorio',
-      maxlength: 'El stock debe tener máximo 4 dígitos',
+      maxlength: 'El stock debe tener máximo 6 dígitos',
       number: 'Ingrese solo dígitos',
       min: 'El stock debe ser mayor o igual a 1'
     },
     minimum_stock: {
       required: 'El stock mínimo del producto es olbigatorio',
-      maxlength: 'El stock mínimo debe tener máximo 4 dígitos',
+      maxlength: 'El stock mínimo debe tener máximo 6 dígitos',
       number: 'Ingrese solo dígitos',
       min: 'El stock mínimo debe ser mayor o igual a 1'
     },

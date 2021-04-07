@@ -23,6 +23,10 @@ class SaleController extends Controller
         $product = Product::where('barcode', $barcode)->whereNull('deleted_at')->first();
         if ($product) {
             if($product->stock > 0) {
+                if($product->unit_id == 1) {
+                    $product->stock = number_format($product->stock);
+                    $product->minimum_stock = number_format($product->minimum_stock);
+                }
                 return response()->json($product);
             }
 

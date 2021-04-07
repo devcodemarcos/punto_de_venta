@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 
 @push('css')
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="{{ mix('css/plugins/jquery-ui.css') }}">
 @endpush
 
 @section('title', 'Ventas')
@@ -9,7 +9,7 @@
 
 @php
 $breads = [
-'Ventas' => '#'
+    'Ventas' => '#'
 ];
 @endphp
 
@@ -26,7 +26,7 @@ $breads = [
         </div>
         <div class="p-5">
             <div class="items-center justify-between w-full flex pb-3 bg-white mb-2">
-                <form ng-submit="submit($event)" action="{{ route('sales.find.barcode') }}" method="POST" class="w-full" autocomplete="off">
+                <form ng-submit="submit($event)" id="frm-barcode" action="{{ route('sales.find.barcode') }}" method="POST" class="w-full" autocomplete="off">
                     <input ng-model="barcode" name="barcode" id="barcode" class="font-bold border-gray-300 uppercase rounded-full w-full pl-4 text-gray-500 bg-gray-100 leading-tight focus:outline-none outline-none focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 lg:text-sm text-xs" type="text" placeholder="Escanear código o escribir el código y presionar Enter" autofocus>
                 </form>
                 <button ng-click="open('modal-products')" class="bg-gray-200 border border-gray-300 p-2 hover:bg-blue-500 cursor-pointer mx-2 rounded-full">
@@ -75,7 +75,7 @@ $breads = [
                                 <button ng-click="decrement(product.barcode)" class="bg-white text-gray-500 hover:bg-red-500 hover:text-white border rounded-l-lg px-4 py-2 mx-0 outline-none focus:outline-none">
                                     <i class="fas fa-minus"></i>
                                 </button>
-                                <input value="@{{ product.quantity }}" type="text" name="quantity" class="px-3 py-2 text-gray-700 relative bg-gray-100 text-sm w-16 text-center border-gray-200 outline-none focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" readonly="readonly" />
+                                <input value="@{{ product.quantity }}" ng-keyup="calculate($event, product.barcode)" type="text" name="quantity" class="px-3 py-2 text-gray-700 relative text-sm w-20 text-center border-gray-200 outline-none focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 @{{ product.unit_id == 1 ? 'bg-gray-100' : 'bg-white' }}" ng-readonly="product.unit_id == 1" />
                                 <button ng-click="increment(product.barcode)" class="bg-white text-gray-500 hover:bg-blue-500 hover:text-white border rounded-r-lg px-4 py-2 mx-0 outline-none focus:outline-none">
                                     <i class="fas fa-plus"></i>
                                 </button>
@@ -171,8 +171,8 @@ $breads = [
                     </form>
                 </div>
                 <div class="flex justify-end pt-2 space-x-3">
-                    <button type="button" ng-click="paymentSale()" class="px-4 bg-blue-500 px-2 py-1 uppercase rounded font-bold text-white hover:bg-blue-600">Terminar venta</button>
                     <button type="button" ng-click="close('modal-payment')" class="px-4 bg-gray-200 px-2 py-1 uppercase rounded font-bold text-black hover:bg-gray-300">Cerrar</button>
+                    <button type="button" ng-click="paymentSale()" class="px-4 bg-blue-500 px-2 py-1 uppercase rounded font-bold text-white hover:bg-blue-600">Terminar venta</button>
                 </div>
             </div>
         </div>
@@ -195,7 +195,7 @@ $breads = [
                                     <span class="z-10 h-full leading-snug font-normal absolute text-center text-gray-400 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
                                         <i class="fas fa-search"></i>
                                     </span>
-                                    <input employeesearchautocomplete ng-model="text" data-route="{{ route('sales.find.text') }}" type="text" name="text" id="text" class="px-3 py-2 text-gray-500 relative bg-white rounded text-sm border-gray-300 outline-none focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full pl-10" autocomplete="off" />
+                                    <input productssearchautocomplete ng-model="text" data-route="{{ route('sales.find.text') }}" type="text" name="text" id="text" class="px-3 py-2 text-gray-500 relative bg-white rounded text-sm border-gray-300 outline-none focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full pl-10" autocomplete="off" />
                                 </div>
                             </div>
                         </div>
@@ -212,293 +212,5 @@ $breads = [
 @endsection
 
 @push('scripts')
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<!-- <script src="{{ mix('/js/sales.js') }}"></script> -->
-
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
-<script>
-    (function() {
-        'use strict';
-
-        var app = angular.module('myApp', [], [
-            '$httpProvider',
-            function($httpProvider) {
-                $httpProvider.defaults.headers.post['X-CSRF-TOKEN'] = $('meta[name=csrf-token]').attr('content');
-            }
-        ]);
-
-        app.controller('main', function($scope, $http) {
-            $scope.products = new Object();
-            $scope.sale = {
-                total: 0,
-                cambio: 0,
-                pago: ''
-            };
-
-            $scope.submit = function($event) {
-                $event.preventDefault();
-                $http({
-                    method: 'POST',
-                    url: '/buscar-por-codigo-barras',
-                    data: {
-                        barcode: barcode
-                    }
-                }).then(function successCallback(response) {
-                    try {
-                        $scope.appendToObject(response.data);
-                    } catch (error) {
-                        $.notifyBar({
-                            cssClass: "warning",
-                            html: error
-                        });
-                    }
-                }, function errorCallback(error) {
-                    switch (error.status) {
-                        case 404:
-                            $.notifyBar({
-                                cssClass: "error",
-                                html: error.data.message
-                            });
-                            break;
-                        case 406:
-                            $.notifyBar({
-                                cssClass: "warning",
-                                html: error.data.message
-                            });
-                            break;
-
-                        default:
-                            $.notifyBar({
-                                cssClass: "error",
-                                html: "Error desconocido, contactar al administrador del sistema!"
-                            });
-                            break;
-                    }
-                });
-
-                $scope.barcode = "";
-            };
-            $scope.paymentSale = function() {
-                if ($('#frm-payment').valid()) {
-                    $.ajax({
-                            url: $('#frm-payment').attr('action'),
-                            method: 'POST',
-                            dataType: 'json',
-                            data: {
-                                sale: $scope.sale,
-                                products: $scope.products
-                            }
-                        })
-                        .done(function(response) {
-                            $scope.clear();
-                            $scope.close('modal-payment');
-                            $.notifyBar({
-                                cssClass: "success",
-                                html: response.message
-                            });
-                        })
-                        .fail(function() {
-                            $.notifyBar({
-                                cssClass: "error",
-                                html: "Error desconocido, contactar al administrador del sistema!"
-                            });
-                        });
-                }
-            };
-            $scope.payment = function(value) {
-                $scope.sale.cambio = value - $scope.sale.total;
-            };
-            $scope.openSale = function() {
-                if ($scope.isObjectEmpty($scope.products)) {
-                    $.notifyBar({
-                        cssClass: "error",
-                        html: 'No hay una lista de productos por cobrar'
-                    });
-                    return false;
-                }
-
-                openModal('modal-payment');
-                $('#pago').trigger('focus');
-            };
-            $scope.open = function(modal) {
-                openModal(modal);
-                $('#text').trigger('focus');
-            };
-            $scope.close = function(modal) {
-                modalClose(modal);
-                $('#barcode').trigger('focus');
-            };
-            $scope.increment = function(barcode) {
-                if ($scope.products[barcode].quantity < $scope.products[barcode].stock) {
-                    $scope.products[barcode].quantity++;
-                    $scope.products[barcode].subtotal = $scope.products[barcode].sale_price * $scope.products[barcode].quantity;
-                    $scope.sale.total += parseFloat($scope.products[barcode].sale_price);
-                } else {
-                    $.notifyBar({
-                        cssClass: "warning",
-                        html: 'Haz alcanzado el stock del sistema'
-                    });
-                }
-            };
-            $scope.decrement = function(barcode) {
-                if ($scope.products[barcode].quantity > 1) {
-                    $scope.products[barcode].quantity--;
-                    $scope.products[barcode].subtotal = $scope.products[barcode].sale_price * $scope.products[barcode].quantity;
-                    $scope.sale.total -= parseFloat($scope.products[barcode].sale_price);
-                }
-            };
-            $scope.isObjectEmpty = function(products) {
-                return Object.keys(products).length === 0;
-            };
-            $scope.cancelSale = function() {
-                if ($scope.isObjectEmpty($scope.products)) {
-                    $.notifyBar({
-                        cssClass: "error",
-                        html: 'No hay una lista de productos por cancelar'
-                    });
-                    return false;
-                }
-
-                $.confirm({
-                    title: 'Cancelar venta',
-                    content: '¿Esta seguro de cancelar esta venta?<br/><b>Esta acción no se puede deshacer</b>',
-                    type: 'red',
-                    typeAnimated: true,
-                    useBootstrap: false,
-                    boxWidth: '400px',
-                    buttons: {
-                        accept: {
-                            text: 'Si, cancelar venta',
-                            action: function() {
-                                $scope.clear();
-                            }
-                        },
-                        close: {
-                            text: 'No',
-                            btnClass: 'btn-red',
-                        }
-                    }
-                });
-            };
-            $scope.clear = function() {
-                $scope.$apply(function() {
-                    $scope.products = new Object();
-                    $scope.sale = {
-                        total: 0,
-                        cambio: 0,
-                        pago: ''
-                    };
-                });
-            };
-            $scope.deleteProduct = function(barcode) {
-                $scope.sale.total -= $scope.products[barcode].subtotal;
-                delete $scope.products[barcode];
-                $('#barcode').trigger('focus');
-            };
-            $scope.appendToObject = function(product) {
-                if (product.barcode in $scope.products) {
-                    // if (product.stock <= $scope.products[product.barcode].quantity) {
-                    //     throw 'Haz alcanzado el stock del sistema';
-                    // }
-
-                    $scope.products[product.barcode].quantity++;
-                    $scope.products[product.barcode].subtotal = product.sale_price * $scope.products[product.barcode].quantity;
-                } else {
-                    $scope.products[product.barcode] = {
-                        quantity: 1,
-                        subtotal: parseFloat(product.sale_price)
-                    };
-                }
-
-                $scope.products[product.barcode].id = product.id;
-                $scope.products[product.barcode].barcode = product.barcode;
-                $scope.products[product.barcode].name = product.name;
-                $scope.products[product.barcode].description = product.description;
-                $scope.products[product.barcode].photo = product.photo;
-                $scope.products[product.barcode].stock = product.stock;
-                $scope.products[product.barcode].sale_price = product.sale_price;
-                $scope.products[product.barcode].unit_id = product.unit_id;
-
-                $scope.sale.total += parseFloat(product.sale_price);
-            };
-        });
-
-        $('#frm-payment').validate({
-            rules: {
-                pago: {
-                    required: true,
-                    number: true,
-                    min: function() {
-                        return parseFloat($("#total").val());
-                    }
-                }
-            },
-            messages: {
-                pago: {
-                    required: 'Ingrese la cantidad recibida',
-                    number: 'Ingrese solo dígitos',
-                    min: 'La cantidad recibida debe ser igual o mayor al total a pagar'
-                }
-            }
-        });
-
-        // app.directive('employeesearchautocomplete', function() {
-        //     return {
-        //         restrict: 'A',
-        //         require: 'ngModel',
-        //         link: function($scope, element, attrs, ngModelCtrl) {
-        //             element.autocomplete({
-        //                 source: function(request, response) {
-        //                     $.ajax({
-        //                             url: $('#text').data('route'),
-        //                             method: 'POST',
-        //                             data: {
-        //                                 text: request.term.trim()
-        //                             },
-        //                             dataType: "json"
-        //                         })
-        //                         .done(function(data) {
-        //                             response(
-        //                                 $.map(data, function(product) {
-        //                                     let price = product.sale_price;
-        //                                     product.label = `${product.name} $${price}`;
-        //                                     return product;
-        //                                 })
-        //                             );
-        //                         })
-        //                         .fail(function(jqXHR, textStatus, errorThrown) {
-        //                             let resp = jqXHR.responseJSON;
-        //                             response([{
-        //                                 label: resp.message,
-        //                                 notValid: true
-        //                             }]);
-        //                         });
-        //                 },
-        //                 select: function(event, product) {
-        //                     if (!product.item.hasOwnProperty('notValid')) {
-        //                         $scope.appendToObject(product.item);
-        //                         $(this).val('');
-        //                         $scope.close('modal-products');
-        //                         $('#barcode').trigger('focus');
-        //                         return false;
-        //                     }
-        //                 },
-        //                 open: function(e, ui) {
-        //                     let acData = $(this).data('ui-autocomplete');
-        //                     acData.menu.element.find('li>div').each(function() {
-        //                         let me = $(this);
-        //                         let keywords = acData.term.split(' ').join('|');
-        //                         me.html(me.text().replace(new RegExp("(" + keywords + ")", "gi"), '<strong>$1</strong>'));
-        //                     });
-        //                 }
-        //             }, {
-        //                 minLength: 2,
-        //                 delay: 300
-        //             });
-        //         }
-        //     }
-        // });
-
-    })();
-</script>
+<script src="{{ mix('/js/sales-angular.js') }}"></script>
 @endpush

@@ -52,7 +52,7 @@
                             <button wire:click="decrement({{ $product }})" class="bg-white text-gray-500 hover:bg-red-500 hover:text-white border rounded-l-lg px-4 py-2 mx-0 outline-none focus:outline-none">
                                 <i class="fas fa-minus"></i>
                             </button>
-                            <input type="text" name="quantity" value="{{ $product->stock }}" class="px-3 py-2 text-gray-700 relative bg-white text-sm w-16 text-center border-gray-200 outline-none focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" readonly />
+                            <input type="text" name="quantity" value="{{ $product->unit_id == 1 ? number_format($product->stock) : $product->stock }}" class="px-3 py-2 text-gray-700 relative bg-white text-sm w-20 text-center border-gray-200 outline-none focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" readonly />
                             <button wire:click="increment({{ $product }})" class="bg-white text-gray-500 hover:bg-blue-500 hover:text-white border rounded-r-lg px-4 py-2 mx-0 outline-none focus:outline-none">
                                 <i class="fas fa-plus"></i>
                             </button>
@@ -60,7 +60,11 @@
                     </td>
                     <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">
                         <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Stock mínimo</span>
-                        {{ $product->minimum_stock }}
+                        @if($product->unit_id == 1)
+                            {{ number_format($product->minimum_stock) }}
+                        @else
+                            {{ $product->minimum_stock }} KG
+                        @endif
                     </td>
                     <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
                         <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Precio de venta</span>

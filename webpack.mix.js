@@ -16,7 +16,8 @@ mix.js([ //plugins y archivos globales
     'resources/js/plugins/jquery.notifyBar.js'
 ], 'public/js')
 .js('resources/js/products.js', 'public/js') //archivos por modulos
-.js('resources/js/sales.js', 'public/js')
+// .js('resources/js/sales.js', 'public/js')
+.js('resources/js/sales-angular.js', 'public/js')
 .js('resources/js/providers.js', 'public/js')
 .js('resources/js/login.js', 'public/js')
 .js('resources/js/users.js', 'public/js')
@@ -25,5 +26,6 @@ mix.js([ //plugins y archivos globales
     require('tailwindcss'),
     require('autoprefixer'),
 ])
+.postCss('resources/css/plugins/jquery-ui.css', 'public/css/plugins')
 .postCss('resources/css/plugins/notifyBar.css', 'public/css/plugins')
 .copy('resources/css/plugins/jq-notify-bar-icons.svg', 'public/css/plugins');

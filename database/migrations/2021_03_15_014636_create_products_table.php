@@ -20,8 +20,10 @@ class CreateProductsTable extends Migration
             $table->text('description')->nullable();
             $table->decimal('purchase_price', 8, 2);
             $table->decimal('sale_price', 8, 2);
-            $table->integer('stock');
-            $table->integer('minimum_stock');
+            // $table->integer('stock');
+            // $table->integer('minimum_stock');
+            $table->decimal('stock', 8, 3);
+            $table->decimal('minimum_stock', 8, 3);
             $table->string('photo')->default('products/no-image-available.jpg');
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable();
